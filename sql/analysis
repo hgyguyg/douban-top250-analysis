@@ -1,0 +1,42 @@
+#评分前十电影
+select `rank`, title, rating_num
+from douban_movies_cleaned
+order by rating_num desc
+limit 10;
+
+#每年上榜电影数量
+select `date`, count(*)
+from douban_movies_cleaned
+group by `date`
+order by `count(*)` desc
+limit 10;
+
+#上榜电影数量前十的导演
+select director, count(*)
+from douban_movies_cleaned
+group by director
+order by `count(*)` desc
+limit 10;
+
+#评分高于平均分的的电影数量
+select count(*)
+from douban_movies_cleaned
+where rating_num > (select avg(rating_num) from douban_movies);
+
+#评价人数前十的电影
+select `rank`, title, rating_people
+from douban_movies_cleaned
+order by rating_people desc
+limit 10;
+
+#各评分区间的电影数量
+select case
+           when rating_num >= 9.5 then '9.5-10'
+           when rating_num >= 9 then '9-9.5'
+           when rating_num >= 8.5 then '8.5-9'
+           else '8-8.5' end as grade_group,
+       count(*)
+from douban_movies_cleaned
+group by grade_group
+order by `count(*)` desc
+limit 10;
